@@ -34,7 +34,13 @@ pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens 
 pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14, format="%d")
 
 st.sidebar.header("🔍 Embedding Inputs")
-video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=100, value=0, format="%d")
+
+# Default value for video embeddings: 640 embeddings per hour
+video_embeddings_default = marengo_video_hours * 640
+
+video_embeddings = st.sidebar.number_input(
+    "Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d"
+)
 audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
@@ -77,7 +83,6 @@ def calculate_embedding_costs():
     )
 
 # === Perform Calculations ===
-# Marengo: input_tokens = 0 (not charged)
 mar_index, mar_input, mar_output, mar_infra = calculate_model_cost("Marengo", marengo_video_hours, marengo_search_calls, 0)
 peg_index, peg_input, peg_output, peg_infra = calculate_model_cost("Pegasus", pegasus_video_hours, pegasus_generate_calls, pegasus_input_tokens_per_call, pegasus_output_tokens_per_call)
 embedding_cost = calculate_embedding_costs()
