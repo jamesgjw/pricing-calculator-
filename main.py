@@ -114,7 +114,7 @@ results_df = pd.DataFrame({
     "Pegasus": pegasus
 })
 
-st.header("📊 Cost Estimate Breakdown for First Year (USD)")
+st.header("Cost Estimate Breakdown for First Year (USD)")
 st.dataframe(results_df.style.format("${:,.0f}"))
 
 grand_total = marengo["Total"] + pegasus["Total"]
