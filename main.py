@@ -39,7 +39,8 @@ st.sidebar.header("🔍 Embedding Inputs")
 video_embeddings_default = marengo_video_hours * 640
 
 video_embeddings = st.sidebar.number_input(
-    "Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d"
+    "Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d",
+        help="Estimated as 640 embeddings per hour of video content. You can adjust if needed."
 )
 audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
