@@ -14,36 +14,36 @@ PRICING = {
         "text": 0.01         # per 1k embeddings
     },
     "input_token_cost_marengo": 0.001,  # per 1k tokens
-    "input_token_cost_pegasus": 0.00,
-    "output_token_cost_pegasus": 0.00,
-    "infra_fee_hourly": 0.003,
-    "storage_fee_hourly": 0.06
+    "input_token_cost_pegasus": 0.001,
+    "output_token_cost_pegasus": 0.002,
+    "monthly_infra_fee_per_video_hour": 0.003,
+    "monthly_storage_fee_per_video_hour": 0.06
 }
 
 # === Sidebar Inputs ===
 st.sidebar.header("📦 Marengo Usage")
-marengo_video_hours = st.sidebar.number_input("Marengo - Video Hours", min_value=0.0, step=0.5)
-marengo_generate_calls = st.sidebar.number_input("Marengo - Generate API Calls", min_value=0, step=1)
-marengo_input_tokens_per_call = st.sidebar.number_input("Marengo - Input Tokens per Call", min_value=0, step=10)
+marengo_video_hours = st.sidebar.number_input("Marengo - Video Hours", min_value=0, step=1, value=10000)
+marengo_generate_calls = st.sidebar.number_input("Marengo - Search API Calls", min_value=0, step=1, value=2000)
+marengo_input_tokens_per_call = st.sidebar.number_input("Marengo - Input Tokens per Call", min_value=0, step=1, value=50)
 
 st.sidebar.header("🦅 Pegasus Usage")
-pegasus_video_hours = st.sidebar.number_input("Pegasus - Video Hours", min_value=0.0, step=0.5)
-pegasus_generate_calls = st.sidebar.number_input("Pegasus - Generate API Calls", min_value=0, step=1)
-pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=10)
-pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=10)
+pegasus_video_hours = st.sidebar.number_input("Pegasus - Video Hours", min_value=0, step=1, value=10000)
+pegasus_generate_calls = st.sidebar.number_input("Pegasus - Generate API Calls", min_value=0, step=1, value=2000)
+pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=50)
+pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14)
 
 st.sidebar.header("🔍 Embedding Inputs (Shared)")
-video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=1)
-audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=1)
-image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=1)
-text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=1)
+video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=1, value=0)
+audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=1, value=0)
+image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=1, value=0)
+text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=1, value=0)
 
 # === Cost Calculation Functions ===
 
 def calculate_model_cost(model, video_hours, generate_calls, input_tokens, output_tokens=0):
     index = video_hours * PRICING["index_cost_per_hour"]
-    infra = video_hours * PRICING["infra_fee_hourly"] * 24 * 30 * 12
-    storage = video_hours * PRICING["storage_fee_hourly"] * 12
+    infra = video_hours * PRICING["monthly_infra_fee_per_video_hour"] * 12
+    storage = video_hours * PRICING["monthly_storage_fee_per_video_hour"] * 12
 
     if model == "Marengo":
         input_token_cost = (generate_calls * input_tokens / 1000) * PRICING["input_token_cost_marengo"]
@@ -87,9 +87,8 @@ results_df = pd.DataFrame({
 
 # === Display Results ===
 st.header("💰 Cost Breakdown Table (USD)")
-
-st.dataframe(results_df.style.format("${:,.2f}"))
+st.dataframe(results_df.style.format("${:,.0f}"))
 
 grand_total = marengo["Total"] + pegasus["Total"]
 st.markdown("---")
-st.success(f"🎯 **Total Estimated First-Year Cost: ${grand_total:,.2f}**")
+st.success(f"🎯 **Total Estimated First-Year Cost: ${grand_total:,.0f}**")
