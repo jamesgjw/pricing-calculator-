@@ -97,7 +97,7 @@ st.success(f"🎯 **Total Estimated First-Year Cost: ${grand_total:,.2f}**")
 
 # === Unit Pricing Display ===
 st.markdown("---")
-st.subheader("📌 Unit Pricing Reference (No rounding)")
+st.subheader("📌 Unit Pricing Reference")
 st.markdown(f"""
 - Indexing: **${PRICING["index_cost_per_hour"]} / hour**
 - Infra: **${PRICING["monthly_infra_fee_per_video_hour"]} / hr / month**
