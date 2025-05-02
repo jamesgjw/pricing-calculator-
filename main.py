@@ -66,9 +66,9 @@ def calculate_model_cost(model, video_hours, generate_calls, input_tokens, outpu
 def calculate_embedding_costs():
     return (
         video_embeddings * PRICING["embedding_cost"]["video"] +
-        audio_embeddings_1k * PRICING["embedding_cost"]["audio"] +
-        image_embeddings_1k * PRICING["embedding_cost"]["image"] +
-        text_embeddings_1k * PRICING["embedding_cost"]["text"]
+        audio_embeddings_1k * PRICING["embedding_cost"]["audio"]/1000 +
+        image_embeddings_1k * PRICING["embedding_cost"]["image"]/1000 +
+        text_embeddings_1k * PRICING["embedding_cost"]["text"]/1000
     )
 
 # === Calculations ===
