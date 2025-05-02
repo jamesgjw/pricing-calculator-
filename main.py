@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Dual Model Pricing Calculator", layout="centered")
+st.set_page_config(page_title="Model Pricing Calculator", layout="centered")
 
-st.title("Twelve Labs - Estimate Pricing Calculator")
+st.title("TwelveLabs - Estimate Pricing Calculator")
 st.caption("For more accurate pricing and advanced usage, please contact our sales team.")
 
 # === Pricing Constants ===
@@ -34,7 +34,7 @@ pegasus_generate_calls = st.sidebar.number_input("Pegasus - Generate API Calls",
 pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=50)
 pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14)
 
-st.sidebar.header("🔍 Embedding Inputs (Shared)")
+st.sidebar.header("🔍 Embedding Inputs")
 video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=100, value=0)
 audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0)
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0)
@@ -83,12 +83,12 @@ marengo["Total"] += embedding_cost
 
 # === Results Table ===
 results_df = pd.DataFrame({
-    "🐎 Marengo": marengo,
-    "🐎🪽 Pegasus": pegasus
+    "Marengo": marengo,
+    "Pegasus": pegasus
 })
 
 # === Display Results ===
-st.header("📊 Cost Estimate Breakdown for First Year (USD)")
+st.header("Cost Estimate Breakdown for First Year (USD)")
 st.dataframe(results_df.style.format("${:,.2f}"))
 
 grand_total = marengo["Total"] + pegasus["Total"]
