@@ -24,21 +24,21 @@ PRICING = {
 
 # === Sidebar Inputs ===
 st.sidebar.image("marengo.png", use_container_width=True)
-marengo_video_hours = st.sidebar.number_input("Marengo - Video Hours", min_value=0, step=100, value=10000, format="%0,.0f")
-marengo_generate_calls = st.sidebar.number_input("Marengo - Search API Calls", min_value=0, step=100, value=2000, format="%0,.0f")
-marengo_input_tokens_per_call = st.sidebar.number_input("Marengo - Input Tokens per Call", min_value=0, step=1, value=50, format="%0,.0f")
+marengo_video_hours = st.sidebar.number_input("Marengo - Video Hours", min_value=0.0, step=100.0, value=10000.0, format="%0,.0f")
+marengo_generate_calls = st.sidebar.number_input("Marengo - Search API Calls", min_value=0.0, step=100.0, value=2000.0, format="%0,.0f")
+marengo_input_tokens_per_call = st.sidebar.number_input("Marengo - Input Tokens per Call", min_value=0.0, step=1.0, value=50.0, format="%0,.0f")
 
 st.sidebar.image("pegasus.png", use_container_width=True)
-pegasus_video_hours = st.sidebar.number_input("Pegasus - Video Hours", min_value=0, step=100, value=10000, format="%0,.0f")
-pegasus_generate_calls = st.sidebar.number_input("Pegasus - Generate API Calls", min_value=0, step=100, value=2000, format="%0,.0f")
-pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=50, format="%0,.0f")
-pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14, format="%0,.0f")
+pegasus_video_hours = st.sidebar.number_input("Pegasus - Video Hours", min_value=0.0, step=100.0, value=10000.0, format="%0,.0f")
+pegasus_generate_calls = st.sidebar.number_input("Pegasus - Generate API Calls", min_value=0.0, step=100.0, value=2000.0, format="%0,.0f")
+pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0.0, step=1.0, value=50.0, format="%0,.0f")
+pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0.0, step=1.0, value=14.0, format="%0,.0f")
 
 st.sidebar.header("🔍 Embedding Inputs")
-video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=100, value=0, format="%0,.0f")
-audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0, format="%0,.0f")
-image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%0,.0f")
-text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%0,.0f")
+video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0.0, step=100.0, value=0.0, format="%0,.0f")
+audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0.0, step=100.0, value=0.0, format="%0,.0f")
+image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0.0, step=100.0, value=0.0, format="%0,.0f")
+text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0.0, step=100.0, value=0.0, format="%0,.0f")
 
 # === Cost Calculation Functions ===
 
