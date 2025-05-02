@@ -23,31 +23,10 @@ default_pricing = {
     "search_cost_per_call": 0.001
 }
 
-# === Sidebar: Adjustable Unit Pricing ===
-st.sidebar.header("🧮 Unit Pricing Settings")
-pricing = {}
-pricing["index_cost_per_hour"] = st.sidebar.number_input("Indexing ($/hr)", value=default_pricing["index_cost_per_hour"])
-pricing["monthly_infra_fee_per_video_hour"] = st.sidebar.number_input("Infra Fee ($/hr/mo)", value=default_pricing["monthly_infra_fee_per_video_hour"])
-pricing["monthly_storage_fee_per_video_hour"] = st.sidebar.number_input("Storage Fee ($/hr/mo)", value=default_pricing["monthly_storage_fee_per_video_hour"])
-pricing["search_cost_per_call"] = st.sidebar.number_input("Search API Call Cost ($/call)", value=default_pricing["search_cost_per_call"])
-
-st.sidebar.markdown("**Embedding Costs**")
-pricing["embedding_cost"] = {
-    "video": st.sidebar.number_input("Video Embedding ($/embedding)", value=default_pricing["embedding_cost"]["video"]),
-    "audio": st.sidebar.number_input("Audio Embedding ($/1k)", value=default_pricing["embedding_cost"]["audio"]),
-    "image": st.sidebar.number_input("Image Embedding ($/1k)", value=default_pricing["embedding_cost"]["image"]),
-    "text": st.sidebar.number_input("Text Embedding ($/1k)", value=default_pricing["embedding_cost"]["text"]),
-}
-
-pricing["input_token_cost_marengo"] = st.sidebar.number_input("Marengo Input Tokens ($/1k)", value=default_pricing["input_token_cost_marengo"])
-pricing["input_token_cost_pegasus"] = st.sidebar.number_input("Pegasus Input Tokens ($/1k)", value=default_pricing["input_token_cost_pegasus"])
-pricing["output_token_cost_pegasus"] = st.sidebar.number_input("Pegasus Output Tokens ($/1k)", value=default_pricing["output_token_cost_pegasus"])
-
-# === Usage Inputs ===
+# === Sidebar: Usage Inputs ===
 st.sidebar.image("marengo.png", use_container_width=True)
 marengo_video_hours = st.sidebar.number_input("Marengo - Video Hours", min_value=0, step=100, value=10000, format="%d")
 marengo_search_calls = st.sidebar.number_input("Marengo - Search API Calls", min_value=0, step=100, value=2000, format="%d")
-
 marengo_input_tokens_per_call = st.sidebar.number_input("Marengo - Input Tokens per Call", min_value=0, step=1, value=50, format="%d")
 
 st.sidebar.image("pegasus.png", use_container_width=True)
@@ -62,7 +41,27 @@ audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_v
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 
-# === Calculations ===
+# === Main Page: Adjustable Unit Pricing ===
+with st.expander("📐 Adjust Unit Pricing (Advanced)"):
+    pricing = {}
+    pricing["index_cost_per_hour"] = st.number_input("Indexing ($/hr)", value=default_pricing["index_cost_per_hour"])
+    pricing["monthly_infra_fee_per_video_hour"] = st.number_input("Infra Fee ($/hr/mo)", value=default_pricing["monthly_infra_fee_per_video_hour"])
+    pricing["monthly_storage_fee_per_video_hour"] = st.number_input("Storage Fee ($/hr/mo)", value=default_pricing["monthly_storage_fee_per_video_hour"])
+    pricing["search_cost_per_call"] = st.number_input("Search API Call Cost ($/call)", value=default_pricing["search_cost_per_call"])
+
+    st.markdown("**Embedding Costs**")
+    pricing["embedding_cost"] = {
+        "video": st.number_input("Video Embedding ($/embedding)", value=default_pricing["embedding_cost"]["video"]),
+        "audio": st.number_input("Audio Embedding ($/1k)", value=default_pricing["embedding_cost"]["audio"]),
+        "image": st.number_input("Image Embedding ($/1k)", value=default_pricing["embedding_cost"]["image"]),
+        "text": st.number_input("Text Embedding ($/1k)", value=default_pricing["embedding_cost"]["text"]),
+    }
+
+    pricing["input_token_cost_marengo"] = st.number_input("Marengo Input Tokens ($/1k)", value=default_pricing["input_token_cost_marengo"])
+    pricing["input_token_cost_pegasus"] = st.number_input("Pegasus Input Tokens ($/1k)", value=default_pricing["input_token_cost_pegasus"])
+    pricing["output_token_cost_pegasus"] = st.number_input("Pegasus Output Tokens ($/1k)", value=default_pricing["output_token_cost_pegasus"])
+
+# === Cost Calculation Functions ===
 def calculate_model_cost(model, video_hours, generate_calls, input_tokens, output_tokens=0):
     indexing = video_hours * pricing["index_cost_per_hour"]
     input_token_cost = (generate_calls * 365 * input_tokens / 1000) * (
@@ -84,31 +83,32 @@ def calculate_embedding_costs():
         text_embeddings_1k * pricing["embedding_cost"]["text"] / 1000
     )
 
-# Calculate model-specific costs
+# === Perform Calculations ===
 marengo = calculate_model_cost("Marengo", marengo_video_hours, marengo_search_calls, marengo_input_tokens_per_call)
 pegasus = calculate_model_cost("Pegasus", pegasus_video_hours, pegasus_generate_calls, pegasus_input_tokens_per_call, pegasus_output_tokens_per_call)
 
-# Calculate shared infra+storage (charged once across models)
+# Shared Infra + Storage (only charge once)
 total_video_hours = max(marengo_video_hours, pegasus_video_hours)
 infra_storage = total_video_hours * (pricing["monthly_infra_fee_per_video_hour"] + pricing["monthly_storage_fee_per_video_hour"]) * 12
 
-# Calculate embedding cost (added under Marengo)
+# Embedding cost goes to Marengo
 embedding_cost = calculate_embedding_costs()
 marengo["Embedding"] = embedding_cost
 
-# Search API cost (based on Marengo search calls only)
+# Search API call cost (flat)
 search_cost = marengo_search_calls * pricing["search_cost_per_call"]
-
-# Build final display table
 marengo["Search"] = search_cost
 pegasus["Search"] = 0
+
+# Shared Infra + Storage (only once)
 marengo["Infra + Storage"] = infra_storage
 pegasus["Infra + Storage"] = 0
 
+# Totals
 marengo["Total"] = sum(marengo.values())
 pegasus["Total"] = sum(pegasus.values())
 
-# Final table and display
+# === Display Table ===
 results_df = pd.DataFrame({
     "Marengo": marengo,
     "Pegasus": pegasus
