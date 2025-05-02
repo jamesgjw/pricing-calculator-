@@ -9,7 +9,7 @@ st.caption("For more accurate pricing and advanced usage, please contact our sal
 # === Default Pricing Constants ===
 default_pricing = {
     "index_cost_per_hour": 2.500,
-    "infra_storage_unit_price": 0.063,  # 0.003 (infra) + 0.06 (storage)
+    "infra_storage_unit_price": 0.07, 
     "search_cost_per_call": 0.001,
     "embedding_cost": {
         "video": 0.003,
