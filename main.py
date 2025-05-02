@@ -88,12 +88,12 @@ results_df = pd.DataFrame({
 })
 
 # === Display Results ===
-st.header("Cost Estimate Breakdown for First Year (USD)")
-st.dataframe(results_df.style.format("${:,.2f}"))
+st.header("📊 Cost Estimate Breakdown for First Year (USD)")
+st.dataframe(results_df.style.format("${:,.0f}"))  # Rounded to 0 decimal places
 
 grand_total = marengo["Total"] + pegasus["Total"]
 st.markdown("---")
-st.success(f"🎯 **Total Estimated First-Year Cost: ${grand_total:,.2f}**")
+st.success(f"🎯 **Total Estimated First-Year Cost: ${grand_total:,.0f}**")
 
 # === Unit Pricing Display ===
 st.markdown("---")
