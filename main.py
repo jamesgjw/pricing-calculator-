@@ -46,11 +46,11 @@ def calculate_model_cost(model, video_hours, generate_calls, input_tokens, outpu
     storage = video_hours * PRICING["monthly_storage_fee_per_video_hour"] * 12
 
     if model == "Marengo":
-        input_token_cost = (generate_calls * input_tokens / 1000) * PRICING["input_token_cost_marengo"]
+        input_token_cost = (generate_calls *365 * input_tokens / 1000) * PRICING["input_token_cost_marengo"]
         output_token_cost = 0
     else:  # Pegasus
-        input_token_cost = (generate_calls * input_tokens / 1000) * PRICING["input_token_cost_pegasus"]
-        output_token_cost = (generate_calls * output_tokens / 1000) * PRICING["output_token_cost_pegasus"]
+        input_token_cost = (generate_calls  *365 * input_tokens / 1000) * PRICING["input_token_cost_pegasus"]
+        output_token_cost = (generate_calls  *365 * output_tokens / 1000) * PRICING["output_token_cost_pegasus"]
 
     total = index + infra + storage + input_token_cost + output_token_cost
     return {
