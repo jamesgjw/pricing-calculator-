@@ -9,7 +9,7 @@ st.caption("For more accurate pricing and advanced usage, please contact our sal
 # === Default Pricing Constants ===
 default_pricing = {
     "index_cost_per_hour": 2.500,
-    "infra_storage_unit_price": 0.07, 
+    "infra_storage_unit_price": 0.070,
     "search_cost_per_call": 0.001,
     "embedding_cost": {
         "video": 0.003,
@@ -26,7 +26,6 @@ default_pricing = {
 st.sidebar.image("marengo.png", use_container_width=True)
 marengo_video_hours = st.sidebar.number_input("Marengo - Video Hours", min_value=0, step=100, value=10000, format="%d")
 marengo_search_calls = st.sidebar.number_input("Marengo - Search API Calls", min_value=0, step=100, value=2000, format="%d")
-marengo_input_tokens_per_call = st.sidebar.number_input("Marengo - Input Tokens per Call", min_value=0, step=1, value=50, format="%d")
 
 st.sidebar.image("pegasus.png", use_container_width=True)
 pegasus_video_hours = st.sidebar.number_input("Pegasus - Video Hours", min_value=0, step=100, value=10000, format="%d")
@@ -78,7 +77,8 @@ def calculate_embedding_costs():
     )
 
 # === Perform Calculations ===
-mar_index, mar_input, mar_output, mar_infra = calculate_model_cost("Marengo", marengo_video_hours, marengo_search_calls, marengo_input_tokens_per_call)
+# Marengo: input_tokens = 0 (not charged)
+mar_index, mar_input, mar_output, mar_infra = calculate_model_cost("Marengo", marengo_video_hours, marengo_search_calls, 0)
 peg_index, peg_input, peg_output, peg_infra = calculate_model_cost("Pegasus", pegasus_video_hours, pegasus_generate_calls, pegasus_input_tokens_per_call, pegasus_output_tokens_per_call)
 embedding_cost = calculate_embedding_costs()
 search_cost = marengo_search_calls * pricing["search_cost_per_call"]
@@ -86,7 +86,7 @@ search_cost = marengo_search_calls * pricing["search_cost_per_call"]
 # === Assemble results ===
 marengo = {
     "Indexing": mar_index,
-    "Input Tokens": mar_input,
+    "Input Tokens": mar_input,  # Will be 0
     "Output Tokens": 0,
     "Embedding": embedding_cost,
     "Search": search_cost,
