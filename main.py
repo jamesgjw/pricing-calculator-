@@ -88,7 +88,7 @@ results_df = pd.DataFrame({
 })
 
 # === Display Results ===
-st.header("📊 Cost Estimate Breakdown for First Year (USD)")
+st.header("Cost Estimate Breakdown for First Year (USD)")
 st.dataframe(results_df.style.format("${:,.0f}"))  # Rounded to 0 decimal places
 
 grand_total = marengo["Total"] + pegasus["Total"]
