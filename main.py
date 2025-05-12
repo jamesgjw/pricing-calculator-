@@ -57,6 +57,9 @@ with st.expander("📐 Adjust Unit Pricing (Advanced)"):
     pricing["search_cost_per_call"] = st.number_input("Search API Call Cost ($/call)", value=default_pricing["search_cost_per_call"], format="%.3f")
     pricing["reindex_price_marengo"] = st.number_input("Reindex Price Marengo ($/hr)", value=default_pricing["reindex_price_marengo"], format="%.3f")
     pricing["reindex_price_pegasus"] = st.number_input("Reindex Price Pegasus ($/hr)", value=default_pricing["reindex_price_pegasus"], format="%.3f")
+##  pricing["input_token_cost_marengo"] = st.number_input("Marengo Input Tokens ($/1k)", value=default_pricing["input_token_cost_marengo"], format="%.3f")
+    pricing["input_token_cost_pegasus"] = st.number_input("Pegasus Input Tokens ($/1k)", value=default_pricing["input_token_cost_pegasus"], format="%.3f")
+    pricing["output_token_cost_pegasus"] = st.number_input("Pegasus Output Tokens ($/1k)", value=default_pricing["output_token_cost_pegasus"], format="%.3f")
 
     st.markdown("**Embedding Costs**")
     pricing["embedding_cost"] = {
@@ -66,9 +69,6 @@ with st.expander("📐 Adjust Unit Pricing (Advanced)"):
         "text": st.number_input("Text Embedding ($/1k)", value=default_pricing["embedding_cost"]["text"], format="%.3f"),
     }
 
-    pricing["input_token_cost_marengo"] = st.number_input("Marengo Input Tokens ($/1k)", value=default_pricing["input_token_cost_marengo"], format="%.3f")
-    pricing["input_token_cost_pegasus"] = st.number_input("Pegasus Input Tokens ($/1k)", value=default_pricing["input_token_cost_pegasus"], format="%.3f")
-    pricing["output_token_cost_pegasus"] = st.number_input("Pegasus Output Tokens ($/1k)", value=default_pricing["output_token_cost_pegasus"], format="%.3f")
 
 # === Embedding cost helper
 def calculate_embedding_costs(times=1):
