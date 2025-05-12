@@ -38,7 +38,13 @@ pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Token
 # Contract Inputs
 st.sidebar.header("Contract Setting")
 contract_years = st.sidebar.number_input("Number of Contract Years", min_value=1, step=1, value=1, format="%d")
-reindex_frequency = st.sidebar.number_input("Reindex Frequency (per year)", min_value=0, step=1, value=0, format="%d")
+reindex_frequency = st.sidebar.number_input(
+    "Reindex Frequency (per year)", 
+    min_value=0, step=1, value=0, format="%d",
+    help="Number of times the video is expected to be reindexed each year. "
+         "Note: In the first year, initial indexing is already included. "
+         "So if the contract is 1 year and frequency is set to 1, no reindex cost or additional embedding is charged."
+)
 enterprise_discount = st.sidebar.number_input("Enterprise Discount (0-1)", min_value=0.0, max_value=1.0, value=0.0, step=0.01)
 
 # Embedding Inputs
