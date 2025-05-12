@@ -32,8 +32,8 @@ marengo_search_calls = st.sidebar.number_input("Marengo - Daily Search API Calls
 st.sidebar.image("pegasus.png", use_container_width=True)
 pegasus_video_hours = st.sidebar.number_input("Pegasus - Video Hours", min_value=0, step=100, value=10000, format="%d")
 pegasus_generate_calls = st.sidebar.number_input("Pegasus - Daily Generate API Calls", min_value=0, step=100, value=2000, format="%d")
-pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=50, format="%d")
-pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14, format="%d")
+pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=500, format="%d")
+pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=200, format="%d")
 
 # Contract Inputs
 st.sidebar.header("Contract Setting")
