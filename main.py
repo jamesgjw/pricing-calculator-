@@ -44,12 +44,12 @@ enterprise_discount = st.sidebar.number_input("Enterprise Discount (0-1)", min_v
 # === Embedding Inputs ===
 st.sidebar.header("🔍 Embedding Inputs")
 video_embeddings_default = marengo_video_hours * 640
-video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d", help="Estimated as 640 embeddings per hour of video content. You can adjust if needed.")
+video_embeddings = st.sidebar.number_input("Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d", help="Estimated as 640 embeddings per hour of video content.")
 audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 
-# === Unit Pricing ===
+# === Main Section: Unit Pricing ===
 with st.expander("📐 Adjust Unit Pricing (Advanced)"):
     pricing = {}
     pricing["index_cost_per_hour"] = st.number_input("Indexing ($/hr)", value=default_pricing["index_cost_per_hour"], format="%.3f")
@@ -84,13 +84,12 @@ total_cost = 0
 
 for year in range(1, contract_years + 1):
     is_first_year = year == 1
-    effective_reindex = max(0, reindex_frequency - 1) if is_first_year else reindex_frequency
-    total_embeddings_this_year = 1 + effective_reindex
+    embedding_times = 1 if is_first_year else reindex_frequency
 
     mar_index = marengo_video_hours * pricing["index_cost_per_hour"] if is_first_year else 0
     peg_index = pegasus_video_hours * pricing["index_cost_per_hour"] if is_first_year else 0
-    mar_reindex = marengo_video_hours * pricing["reindex_price_marengo"] * effective_reindex
-    peg_reindex = pegasus_video_hours * pricing["reindex_price_pegasus"] * effective_reindex
+    mar_reindex = marengo_video_hours * pricing["reindex_price_marengo"] * (0 if is_first_year else reindex_frequency)
+    peg_reindex = pegasus_video_hours * pricing["reindex_price_pegasus"] * (0 if is_first_year else reindex_frequency)
 
     mar_input = 0
     mar_output = 0
@@ -100,7 +99,7 @@ for year in range(1, contract_years + 1):
     mar_infra = marengo_video_hours * pricing["infra_storage_unit_price"] * 12
     peg_infra = pegasus_video_hours * pricing["infra_storage_unit_price"] * 12
 
-    embedding_cost = calculate_embedding_costs(times=total_embeddings_this_year)
+    embedding_cost = calculate_embedding_costs(times=embedding_times)
     search_cost = marengo_search_calls * pricing["search_cost_per_call"] * 365
 
     marengo = {
