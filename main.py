@@ -20,8 +20,8 @@ default_pricing = {
     "input_token_cost_marengo": 0.001,
     "input_token_cost_pegasus": 0.001,
     "output_token_cost_pegasus": 0.002,
-    "reindex_price_marengo": 2.0,
-    "reindex_price_pegasus": 2.0
+    "reindex_price_marengo": 2.5,
+    "reindex_price_pegasus": 2.5
 }
 
 # Sidebar Inputs
