@@ -141,6 +141,12 @@ for year in range(1, contract_years + 1):
 final_price = total_cost * (1 - enterprise_discount)
 st.markdown("---")
 if enterprise_discount > 0:
-    st.success(f"🎯 **Total Estimated {contract_years}-Year Cost: ${final_price:,.0f} with {int(enterprise_discount*100)}% discount**")
+    discount_pct = int(enterprise_discount * 100)
+    discount_amount = total_cost * enterprise_discount
+    st.success(
+        f"🎯 **Total Estimated {contract_years}-Year Cost: ${total_cost:,.0f}**\n\n"
+        f"💸 After a {discount_pct}% enterprise discount (${discount_amount:,.0f} off), the final price is: **${final_price:,.0f}**"
+    )
 else:
     st.success(f"🎯 **Total Estimated {contract_years}-Year Cost: ${final_price:,.0f}**")
+
