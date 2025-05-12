@@ -47,6 +47,7 @@ image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_v
 text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 
 # === Contract Inputs ===
+st.sidebar.header("Contract Setting")
 contract_years = st.sidebar.number_input("Number of Contract Years", min_value=1, step=1, value=1, format="%d")
 reindex_frequency = st.sidebar.number_input("Reindex Frequency (per year)", min_value=0, step=1, value=0, format="%d")
 
