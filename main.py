@@ -35,8 +35,15 @@ pegasus_generate_calls = st.sidebar.number_input("Pegasus - Daily Generate API C
 pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=50, format="%d")
 pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14, format="%d")
 
-st.sidebar.header("🔍 Embedding Inputs")
+# === Contract Inputs ===
+st.sidebar.header("Contract Setting")
+contract_years = st.sidebar.number_input("Number of Contract Years", min_value=1, step=1, value=1, format="%d")
+reindex_frequency = st.sidebar.number_input("Reindex Frequency (per year)", min_value=0, step=1, value=0, format="%d")
+enterprise_discount = st.sidebar.number_input("Enterprise Discount (0-1)", min_value=0.0, max_value=1.0, value=0.0, step=0.01,
+    help="Enter a discount rate as a decimal. For example, 0.15 means 15% discount.")
 
+# === Embedding Inputs ===
+st.sidebar.header("🔍 Embedding Inputs")
 video_embeddings_default = marengo_video_hours * 640
 video_embeddings = st.sidebar.number_input(
     "Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d",
@@ -45,11 +52,6 @@ video_embeddings = st.sidebar.number_input(
 audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
-
-# === Contract Inputs ===
-st.sidebar.header("Contract Setting")
-contract_years = st.sidebar.number_input("Number of Contract Years", min_value=1, step=1, value=1, format="%d")
-reindex_frequency = st.sidebar.number_input("Reindex Frequency (per year)", min_value=0, step=1, value=0, format="%d")
 
 # === Main Section: Unit Pricing ===
 with st.expander("📐 Adjust Unit Pricing (Advanced)"):
@@ -85,11 +87,12 @@ total_cost = 0
 
 for year in range(1, contract_years + 1):
     is_first_year = year == 1
+    effective_reindex = max(0, reindex_frequency - 1) if is_first_year else reindex_frequency
 
     mar_index = marengo_video_hours * pricing["index_cost_per_hour"] if is_first_year else 0
     peg_index = pegasus_video_hours * pricing["index_cost_per_hour"] if is_first_year else 0
-    mar_reindex = marengo_video_hours * pricing["reindex_price_marengo"] * reindex_frequency
-    peg_reindex = pegasus_video_hours * pricing["reindex_price_pegasus"] * reindex_frequency
+    mar_reindex = marengo_video_hours * pricing["reindex_price_marengo"] * effective_reindex
+    peg_reindex = pegasus_video_hours * pricing["reindex_price_pegasus"] * effective_reindex
 
     mar_input = 0
     mar_output = 0
@@ -134,5 +137,12 @@ for year in range(1, contract_years + 1):
 
     total_cost += marengo["Total"] + pegasus["Total"]
 
+# === Final Summary ===
+final_price = total_cost * (1 - enterprise_discount)
 st.markdown("---")
-st.success(f"🎯 **Total Estimated {contract_years}-Year Cost: ${total_cost:,.0f}**")
+
+if enterprise_discount > 0:
+    discount_pct = int(enterprise_discount * 100)
+    st.success(f"🎯 **Total Estimated {contract_years}-Year Cost: ${final_price:,.0f} with {discount_pct}% discount**")
+else:
+    st.success(f"🎯 **Total Estimated {contract_years}-Year Cost: ${final_price:,.0f}**")
