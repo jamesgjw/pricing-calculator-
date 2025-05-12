@@ -35,20 +35,39 @@ pegasus_generate_calls = st.sidebar.number_input("Pegasus - Daily Generate API C
 pegasus_input_tokens_per_call = st.sidebar.number_input("Pegasus - Input Tokens per Call", min_value=0, step=1, value=50, format="%d")
 pegasus_output_tokens_per_call = st.sidebar.number_input("Pegasus - Output Tokens per Call", min_value=0, step=1, value=14, format="%d")
 
-st.sidebar.header("🔍 Embedding Inputs")
+# === Contract Inputs (moved higher) ===
+st.sidebar.header("📆 Contract Settings")
+contract_years = st.sidebar.number_input(
+    "Number of Contract Years",
+    min_value=1,
+    step=1,
+    value=1,
+    format="%d",
+    help="Used to generate cost breakdown for each contract year."
+)
+reindex_frequency = st.sidebar.number_input(
+    "Reindex Frequency (per year)",
+    min_value=0,
+    step=1,
+    value=0,
+    format="%d",
+    help="How many times per year the same videos will be reindexed."
+)
 
+# === Embedding Inputs ===
+st.sidebar.header("🔍 Embedding Inputs")
 video_embeddings_default = marengo_video_hours * 640
 video_embeddings = st.sidebar.number_input(
-    "Video Embeddings", min_value=0, step=100, value=int(video_embeddings_default), format="%d",
+    "Video Embeddings",
+    min_value=0,
+    step=100,
+    value=int(video_embeddings_default),
+    format="%d",
     help="Estimated as 640 embeddings per hour of video content. You can adjust if needed."
 )
 audio_embeddings_1k = st.sidebar.number_input("Audio Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 image_embeddings_1k = st.sidebar.number_input("Image Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
 text_embeddings_1k = st.sidebar.number_input("Text Embeddings (per 1k)", min_value=0, step=100, value=0, format="%d")
-
-# === Contract Inputs ===
-contract_years = st.sidebar.number_input("Number of Contract Years", min_value=1, step=1, value=1, format="%d")
-reindex_frequency = st.sidebar.number_input("Reindex Frequency (per year)", min_value=0, step=1, value=0, format="%d")
 
 # === Main Section: Unit Pricing ===
 with st.expander("📐 Adjust Unit Pricing (Advanced)"):
