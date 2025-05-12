@@ -145,12 +145,15 @@ if enterprise_discount > 0:
     discount_amount = total_cost * enterprise_discount
 
     st.markdown(f"""
-    🎯 **Total Estimated {contract_years}-Year Cost (before discount):** ${total_cost:,.0f}  
-    💸 **Enterprise Discount ({discount_pct}%):** -${discount_amount:,.0f}  
-    """)
+    <div style='line-height: 1.8; font-size: 16px'>
+        🎯 <b>Total Estimated {contract_years}-Year Cost (before discount):</b> ${total_cost:,.0f}<br>
+        💸 <b>Enterprise Discount ({discount_pct}%):</b> -${discount_amount:,.0f}
+    </div>
+    """, unsafe_allow_html=True)
 
     st.success(f"✅ Final Cost After Discount: ${final_price:,.0f}")
 else:
-    st.success(f"🎯 **Total Estimated {contract_years}-Year Cost: ${final_price:,.0f}**")
+    st.success(f"🎯 Total Estimated {contract_years}-Year Cost: ${final_price:,.0f}")
+
 
 
